@@ -1,0 +1,140 @@
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:color';
+@use "sass:meta";
+
+$sizes: (4px, 8px, 16px, 32px, 64px, 96px, 128px);
+
+$macroSpacings: (
+    xxs: list.nth($sizes, 1),
+    xs: list.nth($sizes, 2), 
+    sm: list.nth($sizes, 3), 
+    md: list.nth($sizes, 4), 
+    lg: list.nth($sizes, 5), 
+    xl: list.nth($sizes, 6), 
+    xxl: list.nth($sizes, 7), 
+);
+$microsizes: (2px, 4px, 6px, 8px, 12px, 16px, 18px);
+
+$microSpacing: (
+    xxs: list.nth($sizes, 1),
+    xs: list.nth($sizes, 2), 
+    sm: list.nth($sizes, 3), 
+    md: list.nth($sizes, 4), 
+    lg: list.nth($sizes, 5), 
+    xl: list.nth($sizes, 6), 
+    xxl: list.nth($sizes, 7), 
+);
+
+$colors: ();
+// Base color scales
+$colorScales : 10, 20, 30, 40, 50, 60, 70, 80, 90, 95;
+$colorsBase: (
+    "primary": (hue: 135.48, chroma: 44.2),
+);
+
+@each $colorName, $colorValues in $colorsBase {
+    $colors: map-merge($colors, (
+        #{$colorName}-0:(lightness: 0, chroma: 0, hue: 0)
+    ));
+    @each $scale in $colorScales {
+        $colors: map-merge($colors, (
+            #{$colorName}-#{$scale}:(lightness: $scale, chroma: map-get($colorValues, "chroma"), hue: map-get($colorValues, "hue"))
+        ));
+    }
+    $colors: map-merge($colors, (
+        #{$colorName}-100:(lightness: 100, chroma: 0, hue: 0)
+    ));
+};
+
+$greyScales : 0, 4, 6, 10, 12, 17, 20, 22, 24, 30, 40, 50, 60, 70, 80, 87, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100;
+$greyBase: (
+    "neutral": (hue: 121.52, chroma: 3.03),
+    "neutral-variant": (hue: 125.37, chroma: 6.17),
+);
+
+@each $colorName, $colorValues in $greyBase {
+    @each $scale in $greyScales {
+        $colors: map-merge($colors, (
+            #{$colorName}-#{$scale}:(lightness: $scale, chroma: map-get($colorValues, "chroma"), hue: map-get($colorValues, "hue"))
+        ));
+    }
+};
+
+// Color palette
+$containerColors: (
+    "primary": map-get($colors, "primary-40"),
+    "primaryVariation": map-get($colors, "primary-90"),
+    "onPrimary": map-get($colors, "primary-100"),
+    "onPrimaryVariation": map-get($colors, "primary-10"),
+);
+
+@each $colorName, $colorValues in $containerColors {
+    $colors: map-merge($colors, (
+        #{$colorName}:(lightness: map-get($colorValues, "lightness"), chroma: map-get($colorValues, "chroma"), hue: map-get($colorValues, "hue"))
+    ));
+};
+
+$surfaceColors: (
+    "surface": map-get($colors, "neutral-92"),
+    "surfaceDim": map-get($colors, "neutral-87"),
+    "surfaceBright": map-get($colors, "neutral-98"),
+    "surfaceContainer-lowest": map-get($colors, "neutral-100"),
+    "surfaceContainer-low": map-get($colors, "neutral-96"),
+    "surfaceContainer-medium": map-get($colors, "neutral-94"),
+    "surfaceContainer-high": map-get($colors, "neutral-92"),
+    "surfaceContainer-highest": map-get($colors, "neutral-90"),
+    "onSurface": map-get($colors, "neutral-10"),
+    "onSurfaceVariant": map-get($colors, "neutral-30"),
+    "outline": map-get($colors, "neutral-50"),
+    "outlineVariant": map-get($colors, "neutral-80"),
+);
+
+@each $colorName, $colorValues in $surfaceColors {
+    $colors: map-merge($colors, (
+        #{$colorName}:(lightness: map-get($colorValues, "lightness"), chroma: map-get($colorValues, "chroma"), hue: map-get($colorValues, "hue"))
+    ));
+};
+
+$other-colors: (
+    "inverseSurface": map-get($colors, "neutral-20"),
+    "inverseOnSurface": map-get($colors, "neutral-95"),
+);
+
+@each $colorName, $colorValues in $other-colors {
+    $colors: map-merge($colors, (
+        #{$colorName}:(lightness: map-get($colorValues, "lightness"), chroma: map-get($colorValues, "chroma"), hue: map-get($colorValues, "hue"))
+    ));
+};
+
+@function getColorFromPalette($variation, $opacity: 1, $darken: 0, $saturate: 0) {
+    $color: map-get($colors, $variation);
+    $l: map-get($color, "lightness");
+    $c: map-get($color , "chroma");
+    $h: map-get($color, "hue");
+    @return lch(#{$l + $darken} #{$c + $saturate} #{$h} / $opacity); 
+}
+
+@mixin container-surface($surfaceColor: "surface", $color: "onSurface", $outlineColor: "", $shadow: "") {
+    @if(meta.type-of($surfaceColor) == "list") {
+        background-color: getColorFromPalette(nth($surfaceColor, 1), nth($surfaceColor, 2));
+    } @else {
+        background-color: getColorFromPalette($surfaceColor);
+    }
+    @if(meta.type-of($color) == "list") {
+        color: getColorFromPalette(nth($color, 1), nth($color, 2));
+    }
+    @else {
+        color: getColorFromPalette($color, 1);
+    }
+    @if(meta.type-of($outlineColor) == "list") {
+        @if($outlineColor != "") {
+            border-color: getColorFromPalette(nth($outlineColor, 1), nth($outlineColor, 2));
+        }
+    }
+    @else {
+        @if($outlineColor != "") {
+            border: 2px solid getColorFromPalette($outlineColor, 1);
+        }
+    }
+}
