@@ -1,9 +1,9 @@
+import { setContext } from 'svelte';
 import { writable } from 'svelte/store';
+import { browser } from '$app/environment';
 import type { Task } from "../types/Task.js";
 
-export const count = writable(0);
-
-const dummyData = [
+const dummyData: Task[] = [
     {
         id: 0,
         description: "Finish the report for the upcoming meeting",
@@ -52,7 +52,9 @@ const dummyData = [
 ];
 
 function createTaskStore() {
-    const { subscribe, set, update } = writable(dummyData);
+    const initialValue = browser ? window.localStorage.getItem('ToDoApp') != null ? JSON.parse(window.localStorage.getItem('ToDoApp') || "") : dummyData : dummyData;
+    const { subscribe, set, update } = writable(initialValue);
+
     return {
         subscribe,
         create: () => update((n) => {
@@ -71,6 +73,9 @@ function createTaskStore() {
                 if(task.id == taskToUpdate.id) return taskToUpdate
                 return task
             })
+            if (browser) {
+                window.localStorage.setItem('ToDoApp', JSON.stringify(n));
+            }
             return result;
         }),
         delete: (taskToRemove: Task) => update((n) => {

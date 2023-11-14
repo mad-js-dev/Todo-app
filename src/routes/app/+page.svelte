@@ -1,4 +1,5 @@
 <script lang="ts">
+import { get } from 'svelte/store';
 import { tasks } from '../../stores/stores';
 import TaskList from '../../components/organisms/TaskList.svelte';
 import ColumnsGrid from '../../components/templates/ColumnsGrid.svelte';
@@ -16,6 +17,7 @@ const deleteTask = (event:CustomEvent) => {
 
 <svelte:window bind:innerWidth={screenSize} />
 <ColumnsGrid --cols="2" --col1Width="4" --col2Width="8">
+    {$tasks}
     <div slot="column1">
         <h2>Very very long lorem ipsum long lorem ipsum title</h2>
         <p>
