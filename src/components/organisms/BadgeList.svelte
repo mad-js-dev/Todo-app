@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { iconName } from "../../types/IconName.d.ts";
+    import type { iconName } from "../../types/iconName.d.ts";
     import IconBadge from '../molecules/IconBadge.svelte';
     type BadgeListItem = { icon:iconName, title:string, description: string};
     export let listData: Array<BadgeListItem> = [];
@@ -31,9 +31,6 @@
             }
         }
 
-        &__badgeWrapper {
-        }
-
         &__contentWrapper {
             padding: 0 calc($spacing / 2);
             margin-bottom: calc($spacing / 2);
@@ -42,10 +39,5 @@
         &__title:not(*:first-child) {
             margin-top: calc($spacing / 2);
         }
-
-        &__description {
-
-        }
-
     }
 </style>

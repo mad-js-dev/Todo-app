@@ -1,6 +1,5 @@
 <script lang="ts">
     const itemAmount = Object.keys($$slots).length;
-    export let columns: number = (itemAmount <= 12) ? itemAmount : 12;
     export let childComponent:any;
     export let children:any = [];
 </script>
