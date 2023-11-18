@@ -30,20 +30,22 @@
 <svelte:window bind:innerWidth={screenSize} />
 <ColumnsGrid --cols="2" --col1Width="4" --col2Width="8">
     <div slot="column1">
-        <h1>My Tasks App</h1>
-        <p>Welcome to our Simple Task List App! Effortlessly manage your daily tasks with our user-friendly application. Stay organized and boost productivity as you create, edit, and complete tasks with ease. Experience a seamless way to streamline your to-do list.</p>
-        <a href="/app">
-            <IconButton 
-                className="v-menu__button" 
-                icon=""
-                size="sm"
-                theme="outline"
-            >
-                <svelte:fragment slot="label">
-                    Try it now!
-                </svelte:fragment>
-            </IconButton>
-        </a>
+        <div>
+            <h1>My Tasks App</h1>
+            <p>Welcome to our Simple Task List App! Effortlessly manage your daily tasks with our user-friendly application. Stay organized and boost productivity as you create, edit, and complete tasks with ease. Experience a seamless way to streamline your to-do list.</p>
+            <a href="/app">
+                <IconButton 
+                    className="v-menu__button" 
+                    icon=""
+                    size="sm"
+                    theme="outline"
+                >
+                    <svelte:fragment slot="label">
+                        Try it now!
+                    </svelte:fragment>
+                </IconButton>
+            </a>
+        </div>
     </div>
     <div slot="column2">
         <BadgeList listData={featureList}/>
