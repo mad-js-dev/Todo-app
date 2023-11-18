@@ -1,10 +1,9 @@
 <script lang="ts">
-import IconButton from '../components/molecules/IconButton.svelte';
 import NavigationMenu from '../components/organisms/NavigationMenu.svelte';
 import "@fontsource-variable/aleo";
 import "@fontsource-variable/nunito";
 
-export let data;
+export const data:any[] = [];
 </script>
 
 <div class="v-appWrapper">

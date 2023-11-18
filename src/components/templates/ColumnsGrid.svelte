@@ -1,6 +1,6 @@
 <script lang="ts">
     const itemAmount = Object.keys($$slots).length;
-    export let columns: number = (itemAmount <= 12) ? itemAmount : 12;
+    export const columns: number = (itemAmount <= 12) ? itemAmount : 12;
 
 </script>
 <div class="t-columnsGrid">

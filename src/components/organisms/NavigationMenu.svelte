@@ -94,12 +94,12 @@
                 {/if}
             {/each}
             <li 
-                in:fade={{delay: 100 / routesData.length * i }}
-                out:fade={{delay: -100 / routesData.length * i }}
+                in:fade={{delay: 100 / routesData.length }}
+                out:fade={{delay: -100 / routesData.length }}
             >
                 {#if $page.data.session?.user}
                     <p>Signed in as {$page.data.session.user.email}</p>
-                    <button on:click={signOut}>Sign out</button>
+                    <button on:click={() => signOut()}>Sign out</button>
                 {:else}
                     <p>Not signed in.</p>
                     <button on:click={() => signIn('google')}>Sign in</button>
