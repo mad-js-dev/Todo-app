@@ -2,9 +2,7 @@
 import { createEventDispatcher } from 'svelte';
 import type { Task } from "../../types/Task.d.ts";
 import IconButton from '../molecules/IconButton.svelte';
-import type { iconName } from "../../types/IconName.d.ts";
 import { slide } from 'svelte/transition';
-import { scaleY } from '$lib/transitions';
 
 const dispatch = createEventDispatcher();
 export let list: Array<Task> = [];
@@ -18,7 +16,6 @@ $: filterDone = 0;
 let searchString = "";
 let editString = "";
 
-//CRUD
 const createTask = () => {
     dispatch('createTask');
     selectedTask = readTasks()[0]
@@ -239,9 +236,8 @@ class:o-taskList--edit={selectedTask}>
         display: flex;
         flex-direction: column;
         width: 100%;
-        min-height: 320px;
         overflow-x: auto;
-        padding: 0 map-get($microSpacing, "sm") map-get($microSpacing, "sm") map-get($microSpacing, "sm");
+        padding: 0 0 map-get($microSpacing, "sm") 0;
     }
 
     &__item {

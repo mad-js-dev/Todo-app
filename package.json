@@ -32,6 +32,8 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@auth/core": "^0.18.1",
+		"@auth/sveltekit": "^0.3.12",
 		"@fontsource-variable/aleo": "^5.0.3",
 		"@fontsource-variable/nunito": "^5.0.16",
 		"@fontsource/aleo": "^5.0.18",

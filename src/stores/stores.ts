@@ -24,39 +24,40 @@ const dummyData: Task[] = [
         description: "Schedule a doctor's appointment",
         done: true
     } as Task,
-    {
-        id: 4,
-        description: "Pay the monthly bills",
-        done: true
-    } as Task,
-    {
-        id: 5,
-        description: "Organize the bookshelf",
-        done: false
-    } as Task,
-    {
-        id: 6,
-        description: "Call a friend or family member",
-        done: false
-    } as Task,
-    {
-        id: 7,
-        description: "Plan a weekend getaway",
-        done: false
-    } as Task,
-    {
-        id: 8,
-        description: "Update your resume",
-        done: true
-    } as Task
 ];
 
-function createTaskStore() {
-    const initialValue = browser ? window.localStorage.getItem('ToDoApp') != null ? JSON.parse(window.localStorage.getItem('ToDoApp') || "") : dummyData : dummyData;
-    const { subscribe, set, update } = writable(initialValue);
 
+export function storable(data:Task[]) {
+    //console.log(browser && JSON.parse(localStorage.storable));
+    console.log(browser && localStorage.storable ? JSON.parse(localStorage.storable) : dummyData)
+    console.log(browser && localStorage.storable ? 'localStorage.storable' : 'dummyData')
+    const { subscribe, set, update } = writable(data);
+    if(browser) {
+        if(localStorage.storable == undefined) {
+            set(dummyData)
+        } else {
+            set(JSON.parse(localStorage.storable));
+        }
+    }
+    /*
+    browser &&
+      localStorage.storable &&
+      set(browser && localStorage.storable ? JSON.parse(localStorage.storable) : data);
+    */
+      
     return {
         subscribe,
+        set,
+        update: (taskToUpdate: Task) => update((n) => {
+            const result = n.map((task) => {
+                if(task.id == taskToUpdate.id) return taskToUpdate
+                return task
+            })
+            console.log('meh0')
+            browser && (localStorage.storable = JSON.stringify(n));
+
+            return result;
+        }),
         create: () => update((n) => {
             const task = {
                 id: Date.now(),
@@ -68,24 +69,14 @@ function createTaskStore() {
             return n;
         }),
         read: () => update((n) => n),
-        update: (taskToUpdate: Task) => update((n) => {
-            const result = n.map((task) => {
-                if(task.id == taskToUpdate.id) return taskToUpdate
-                return task
-            })
-            if (browser) {
-                window.localStorage.setItem('ToDoApp', JSON.stringify(n));
-            }
-            return result;
-        }),
         delete: (taskToRemove: Task) => update((n) => {
             const result = n.filter((task) => {
                 if(task.id != taskToRemove.id) return task
             })
-            console.log(result);
+            browser && (localStorage.storable = JSON.stringify(result));
             return result;
         }),
         reset: () => set(dummyData)
     };
 }
-export const tasks = createTaskStore();
+export const tasks = storable(dummyData);

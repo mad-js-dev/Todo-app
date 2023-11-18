@@ -1,37 +1,39 @@
 <script lang="ts">
 import { get } from 'svelte/store';
-import { tasks } from '../../stores/stores';
+import { browser } from '$app/environment';
+import { storable } from '../../stores/stores';
 import TaskList from '../../components/organisms/TaskList.svelte';
 import ColumnsGrid from '../../components/templates/ColumnsGrid.svelte';
 let screenSize:number;
 
-const updateTask = (event:CustomEvent) => {
-    tasks.update(event.detail);
-};
-
-const deleteTask = (event:CustomEvent) => {
-    tasks.delete(event.detail);
-};
+$: store = storable(browser && localStorage.storable ? localStorage.storable : []);
 
 </script>
 
 <svelte:window bind:innerWidth={screenSize} />
 <ColumnsGrid --cols="2" --col1Width="4" --col2Width="8">
-    {$tasks}
     <div slot="column1">
-        <h2>Very very long lorem ipsum long lorem ipsum title</h2>
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse cursus, sapien varius maximus hendrerit, diam tellus cursus mi, eu tempor turpis est sed diam. Donec tortor mauris, condimentum imperdiet imperdiet nec, tempor a odio. Aenean sed vehicula neque.
-        </p>
+        <div>
+            <h2>Very very long lorem ipsum long lorem ipsum title</h2>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse cursus, sapien varius maximus hendrerit, diam tellus cursus mi, eu tempor turpis est sed diam. Donec tortor mauris, condimentum imperdiet imperdiet nec, tempor a odio. Aenean sed vehicula neque.
+            </p>
+        </div>
     </div>
     <div slot="column2">
         <TaskList 
-            list={$tasks} 
-            on:createTask={tasks.create}
-            on:updateTask={updateTask}
-            on:deleteTask={deleteTask}
+            list={$store} 
+            on:createTask={store.create}
+            on:updateTask={(event) => store.update(event.detail)}
+            on:deleteTask={(event) => store.delete(event.detail)}
             condensed={screenSize < 768}
             extended={screenSize > 768 && screenSize < 1200}
         />
     </div>
 </ColumnsGrid>
+
+<style lang="scss">
+:global(.o-taskList) {
+    min-height: 60vh;
+}
+</style>

@@ -4,7 +4,7 @@ import NavigationMenu from '../components/organisms/NavigationMenu.svelte';
 import "@fontsource-variable/aleo";
 import "@fontsource-variable/nunito";
 
-
+export let data;
 </script>
 
 <div class="v-appWrapper">
