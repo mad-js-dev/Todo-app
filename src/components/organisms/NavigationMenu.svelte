@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { signIn, signOut } from '@auth/sveltekit/client'
+    //import { signIn, signOut } from '@auth/sveltekit/client'
     import { page } from '$app/stores'
     import IconButton from '../molecules/IconButton.svelte';
     import type { iconName } from "../../types/iconName.d.ts";
@@ -93,18 +93,20 @@
                 </li>
                 {/if}
             {/each}
+            <!--
             <li 
                 in:fade={{delay: 100 / routesData.length }}
                 out:fade={{delay: -100 / routesData.length }}
             >
                 {#if $page.data.session?.user}
-                    <p>Signed in as {$page.data.session.user.email}</p>
-                    <button on:click={() => signOut()}>Sign out</button>
+                <p>Signed in as {$page.data.session.user.email}</p>
+                <button on:click={() => signOut()}>Sign out</button>
                 {:else}
-                    <p>Not signed in.</p>
-                    <button on:click={() => signIn('google')}>Sign in</button>
+                <p>Not signed in.</p>
+                <button on:click={() => signIn('google')}>Sign in</button>
                 {/if}
             </li>
+            -->
         </ul>
     </nav>
 </div>
