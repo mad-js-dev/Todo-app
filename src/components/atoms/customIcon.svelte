@@ -1,6 +1,6 @@
 <script lang="ts">
 //Icon library (Preferably fontawsome): https://leshak.github.io/svelte-icons-pack/#/pack/fa
-const Icon = require('svelte-icons-pack');
+import Icon from 'svelte-icons-pack';
 import AiOutlineNodeExpand from 'svelte-icons-pack/ai/AiOutlineNodeExpand';
 import type { iconName } from "../../types/iconName.d.ts";
 import FaEdit from "svelte-icons-pack/fa/FaEdit";

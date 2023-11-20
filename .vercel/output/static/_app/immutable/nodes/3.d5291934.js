@@ -1,0 +1,1 @@
+import{s as o,l as n,m as r,i as c,y as e,d as m}from"../chunks/scheduler.e8433b4d.js";import{S as l,i as p}from"../chunks/index.b3abcb9e.js";function u(s){let t;return{c(){t=n("This is an about view")},l(a){t=r(a,"This is an about view")},m(a,i){c(a,t,i)},p:e,i:e,o:e,d(a){a&&m(t)}}}class h extends l{constructor(t){super(),p(this,t,null,u,o,{})}}export{h as component};
