@@ -1,4 +1,4 @@
-import { n as noop, j as assign, k as identity, c as create_ssr_component, a as subscribe, v as validate_component, l as add_styles, d as each, h as add_attribute, e as escape } from "../../chunks/ssr.js";
+import { n as noop, o as assign, p as identity, c as create_ssr_component, a as subscribe, v as validate_component, q as add_styles, d as each, k as add_attribute, e as escape } from "../../chunks/ssr.js";
 import { I as IconButton } from "../../chunks/IconButton.js";
 import { w as writable } from "../../chunks/index.js";
 const is_client = typeof window !== "undefined";
