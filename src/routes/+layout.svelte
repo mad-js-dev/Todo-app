@@ -7,6 +7,7 @@ export const data:any[] = [];
 </script>
 
 <div class="v-appWrapper">
+    <iframe class="v-appWrapper__background" width="100%" height="100%" frameborder="0" src="https://www.shadertoy.com/embed/dtVyz3?gui=false&t=10&paused=false&muted=true" allowfullscreen></iframe>
     <NavigationMenu />
     <div class="v-contentWrapper">
         <slot />
@@ -20,6 +21,8 @@ export const data:any[] = [];
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
+    position: relative;
+
     @media (min-width: 678px) {
         flex-direction: column;
         flex-wrap: nowrap;
@@ -29,6 +32,15 @@ export const data:any[] = [];
 .v-contentWrapper {
     margin: 0;
     width: 100%;
+    padding-top: 16px;
+}
+
+.v-appWrapper__background {
+    position: fixed;
+    top: 0; 
+    left: 0;
+    z-index: -1;
+    filter: blur(1px);
 }
 
 :global {
@@ -37,6 +49,11 @@ export const data:any[] = [];
     //nunito
     body {
         font-family: 'Aleo Variable', serif;
+        margin: 0;
+
+        @media (min-width: 1200px) {
+            overflow: hidden;
+        }
     }
 
     h1,h2,h3,h4,h5,h6 {

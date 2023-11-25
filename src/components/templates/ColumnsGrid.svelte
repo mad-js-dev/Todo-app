@@ -4,7 +4,6 @@
 
 </script>
 <div class="t-columnsGrid">
-
     <div class="t-columnsGrid__wrapper">
         {#if $$slots.column1 }
             <div><slot name="column1" /></div>
@@ -76,9 +75,24 @@
         margin: 0 auto;
         width: 100%;
         min-height: 100vh;
+        margin-top: 10vh;
 
-        & :global(* > *)  {
-            max-height: 70vh;
+        
+
+        & > div {
+            background-color: rgba(255,255,255,0.7);
+            padding: 16px;
+            box-sizing: border-box;
+            /*
+            &:first-child {
+                transform-origin: right center;
+                transform: perspective(1000px) rotateY(10deg);
+            }
+            &:last-child {
+                //transform-origin: left center;
+                //transform: perspective(1000px) rotateY(-10deg);
+            }
+            */
         }
 
         @media (max-width: 678px) {
@@ -126,6 +140,15 @@
                     flex-basis: calc((100% / 12) * nth($columnsWidths, $i) - calc($gap / 2));
                 }
             }
+
+            &__wrapper {
+                flex-wrap: nowrap;
+            }
+
+            & :global(* > *)  {
+                max-height: 70vh;
+            }
+            
         }
     }
 </style>
