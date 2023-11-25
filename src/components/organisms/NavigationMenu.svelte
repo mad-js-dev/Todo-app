@@ -6,29 +6,34 @@
     import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
     import { fade } from 'svelte/transition';
-    $: isOpen = false;
+    let screenSize:number;
+    $: isOpen = (screenSize) ? false : true;
+    $: isDesktop = (screenSize < 1200) ? false : true;
 
-    const menuHeight = tweened(0, {
+    const menuHeight = tweened((!isDesktop) ? 82 : 0, {
 		duration: 600,
+        delay: 0.6,
 		easing: cubicOut
 	});
     const menuButtonOpacity = tweened(0, {
 		duration: 600,
+        delay: 0.6,
 		easing: cubicOut
 	});
     const closeButtonOpacity = tweened(100, {
 		duration: 600,
+        delay: 0.6,
 		easing: cubicOut
 	});
 
     const toggleMenu = () => {
         isOpen = !isOpen;
         if(isOpen) {
-            menuHeight.set(82)
+            (isDesktop) ? menuHeight.set(100) : menuHeight.set(82);
             menuButtonOpacity.set(0)
             closeButtonOpacity.set(100)
         } else {
-            menuHeight.set(0)
+            (isDesktop) ? menuHeight.set(100) : menuHeight.set(0);
             menuButtonOpacity.set(100)
             closeButtonOpacity.set(0)
         }
@@ -41,9 +46,13 @@
         {path: "/roadmap", title: "Roadmap", icon:"question" as iconName}
     ]
 </script>
-    
-<div class="v-menu">
-    <nav>
+
+<svelte:window bind:innerWidth={screenSize} />
+
+<div 
+    class="v-menu"
+    class:v-menu--isOpen={isOpen}>
+    <nav class="v-menu__wrapper">
         <div class="v-menu__header">
             <span class="v-menu__logo">Task App v0.1</span>
             <div class="v-menu__buttonWrapper">
@@ -55,6 +64,7 @@
                             size="md"
                             theme="chromeless"
                             on:click="{toggleMenu}"
+                            color={isDesktop || (isOpen && screenSize < 1200) ? "#222" : "#EEE" }
                             />
                     </div>
                     {:else}
@@ -65,14 +75,15 @@
                             size="md"
                             theme="chromeless"
                             on:click="{toggleMenu}"
+                            color={isDesktop || (isOpen && screenSize < 1200) ? "#222" : "#EEE" }
                         />
                     </div>
                 {/if}
             </div>
         </div>
-        <ul class="v-menu__content" style:height={`${$menuHeight}vh`}>
+        <ul class="v-menu__content" style:height={(isDesktop) ? '100%' : `${$menuHeight}%`}>
             {#each routesData as route, i (i)}
-                {#if isOpen}
+                {#if isOpen || isDesktop}
                 <li 
                     in:fade={{delay: 100 / routesData.length * i }}
                     out:fade={{delay: -100 / routesData.length * i }}
@@ -82,7 +93,7 @@
                             className="v-menu__button" 
                             icon="{route.icon}"
                             size="sm"
-                            theme="outline"
+                            theme={screenSize < 1200 ? "outline" : "text"}
                             on:click="{toggleMenu}"
                         >
                             <svelte:fragment slot="label">
@@ -117,19 +128,43 @@ $padding: map-get($macroSpacings, "sm");
 .v-menu {
     width: 100vw;
     box-sizing: border-box;
-    padding: $padding $padding 0 $padding;
-    border-width: 0;
-    border-bottom-width: 2px;
-    border-style: solid;
-    @include container-surface("surface", "onSurface", "outline");
-    border-top-width: 0;
-    border-left-width: 0;
-    border-right-width: 0;
+    position: absolute;
+    z-index: 1;
+
+    &:before {
+        //backdrop
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 0;
+        background-color: rgba(0,0,0,0);
+        backdrop-filter: blur(0px);
+        transition: all 0.3s;
+        pointer-events: none;
+    }
+
+    &__wrapper {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        position: relative;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        @include container-surface(("surface" 0), "onSurface");
+    }
     
     &__header {
         display: flex;
         width: 100%;
-        padding-bottom: $padding;
+        padding: $padding;
+        color: getColorFromPalette("surfaceContainer-highest");
+        transition: color 0.3s;
     }
 
     &__logo {
@@ -142,6 +177,7 @@ $padding: map-get($macroSpacings, "sm");
 
     &__buttonWrapper {
         position: relative;
+        width: 30%;
     }
 
     &__buttonClose,
@@ -150,20 +186,69 @@ $padding: map-get($macroSpacings, "sm");
         right: 0;
     }
 
+    &--isOpen {
+        transition: all 0.3s;
+        position: fixed;
+        &:before {
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            transition: all 0.3;
+            pointer-events: not-allowed;
+        }
+        
+        & .v-menu__header {
+            color: getColorFromPalette("onSurface");
+            transition: color 0.3s;
+            @include container-surface(("surface"), "onSurface");
+        }
+
+        & .v-menu__content {
+            @include container-surface(("surface"), "onSurface");
+
+        }
+    }
+
 
     &__content {
         overflow: hidden;
         list-style: none;
         padding: 0;
         margin: 0;
+        width: 100%;
+        padding: $padding;
 
         li {
             margin-bottom: calc($padding / 2);
+        }
 
-            :global(.v-menu__button) {
-                width: 100%;
-                text-align: left;
-            }
+        :global(.v-menu__button) {
+            width: 100%;
+            text-align: left;
+        }
+    }
+    
+    @media (min-width: 1200px) {
+        &__buttonClose,
+        &__buttonOpen {
+            display: none;
+        }
+
+        &__header {
+            width: 35%;
+        }
+
+        
+        &__content {
+            width: 60%;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+        }
+
+        :global(li .v-menu__button) {
+            width: auto;
+            text-align: left;
+            margin: 0 16px;
         }
     }
 }

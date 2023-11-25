@@ -74,3 +74,9 @@ const getIcon = (iconName: string) => {
 </script>
 
 <Icon class="{className}" src={getIcon(name)} />
+
+<style lang="scss">
+    :global(svg) {
+        fill: var(--text-color);
+    }
+</style>

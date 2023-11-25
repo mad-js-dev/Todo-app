@@ -5,8 +5,9 @@ import CustomIcon from '../atoms/customIcon.svelte';
 
 export let icon: iconName | "" = "edit";
 export let className: string = "";
+export let color: string = "#000";
 export let size: "sm" | "md" | "lg" = "sm"
-export let theme: "default" | "chromeless" | "outline" = "default"
+export let theme: "default" | "chromeless" | "outline" | "text" = "default"
 </script>
 
 <button 
@@ -16,10 +17,11 @@ export let theme: "default" | "chromeless" | "outline" = "default"
     class:m-iconButton--lg={size == "lg"}
     class:m-iconButton--chromeless={theme == "chromeless"}
     class:m-iconButton--outline={theme == "outline"}
+    class:m-iconButton--text={theme == "text"}
     on:click
 >
     {#if icon != ""}
-    <CustomIcon name={icon} />
+    <CustomIcon name={icon} --text-color={color} />
     {/if}
     
     {#if $$slots.label }
@@ -89,6 +91,19 @@ $bottom-spacings: (map-get($microSpacing, 2), map-get($microSpacing, 3), map-get
 
         & :global(svg) {
             fill: getColorFromPalette("primary");
+        }
+    }
+
+    &--text {
+        background-color: rgba(0, 0, 0, 0);
+        border: none;
+        border-bottom: 2px solid #FFF;
+        color: #FFF;
+        &:hover {
+            border-bottom: 2px solid getColorFromPalette("primary");;
+        }
+        :global(svg) {
+            fill: #FFF;
         }
     }
 }
